@@ -1,0 +1,131 @@
+import 'package:flutter/material.dart';
+import '../models/product.dart';
+import '../models/category.dart';
+
+class SampleData {
+  static List<Category> getCategories() {
+    return [
+      Category(id: '1', name: 'Alimentos', icon: Icons.fastfood),
+      Category(id: '2', name: 'Bebidas', icon: Icons.local_drink),
+      Category(id: '3', name: 'Limpieza', icon: Icons.cleaning_services),
+      Category(id: '4', name: 'Higiene', icon: Icons.health_and_safety),
+      Category(id: '5', name: 'Hogar', icon: Icons.home),
+      Category(id: '6', name: 'Mascotas', icon: Icons.pets),
+    ];
+  }
+
+  static List<Product> getProducts() {
+    return [
+      Product(
+        id: '1',
+        name: 'Leche Entera',
+        description: 'Leche fresca 1L',
+        price: 3.99,
+        imageUrl: '',
+        category: 'Alimentos',
+        rating: 4.5,
+        reviews: 120,
+        isFeatured: true,
+      ),
+      Product(
+        id: '2',
+        name: 'Pan Integral',
+        description: 'Pan de molde integral 500g',
+        price: 2.49,
+        imageUrl: '',
+        category: 'Alimentos',
+        rating: 4.3,
+        reviews: 85,
+        isFeatured: true,
+      ),
+      Product(
+        id: '3',
+        name: 'Agua Mineral',
+        description: 'Agua mineral 1.5L',
+        price: 1.29,
+        imageUrl: '',
+        category: 'Bebidas',
+        rating: 4.7,
+        reviews: 200,
+        isFeatured: false,
+      ),
+      Product(
+        id: '4',
+        name: 'Detergente',
+        description: 'Detergente líquido 1L',
+        price: 5.99,
+        imageUrl: '',
+        category: 'Limpieza',
+        rating: 4.6,
+        reviews: 150,
+        isFeatured: true,
+      ),
+      Product(
+        id: '5',
+        name: 'Papel Higiénico',
+        description: 'Pack de 12 rollos',
+        price: 8.99,
+        imageUrl: '',
+        category: 'Higiene',
+        rating: 4.4,
+        reviews: 90,
+        isFeatured: false,
+      ),
+      Product(
+        id: '6',
+        name: 'Aceite de Oliva',
+        description: 'Aceite extra virgen 500ml',
+        price: 7.99,
+        imageUrl: '',
+        category: 'Alimentos',
+        rating: 4.8,
+        reviews: 180,
+        isFeatured: true,
+      ),
+      Product(
+        id: '7',
+        name: 'Jabón Líquido',
+        description: 'Jabón antibacterial 500ml',
+        price: 4.49,
+        imageUrl: '',
+        category: 'Higiene',
+        rating: 4.5,
+        reviews: 110,
+        isFeatured: false,
+      ),
+      Product(
+        id: '8',
+        name: 'Arroz',
+        description: 'Arroz blanco 1kg',
+        price: 2.99,
+        imageUrl: '',
+        category: 'Alimentos',
+        rating: 4.2,
+        reviews: 95,
+        isFeatured: false,
+      ),
+      Product(
+        id: '9',
+        name: 'Café Molido',
+        description: 'Café premium 250g',
+        price: 6.99,
+        imageUrl: '',
+        category: 'Bebidas',
+        rating: 4.6,
+        reviews: 145,
+        isFeatured: false,
+      ),
+      Product(
+        id: '10',
+        name: 'Comida para Perros',
+        description: 'Alimento balanceado 3kg',
+        price: 12.99,
+        imageUrl: '',
+        category: 'Mascotas',
+        rating: 4.7,
+        reviews: 88,
+        isFeatured: false,
+      ),
+    ];
+  }
+}
