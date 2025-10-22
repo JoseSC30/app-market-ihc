@@ -6,6 +6,9 @@ import '../widgets/category_card.dart';
 import '../widgets/product_card.dart';
 import '../widgets/featured_banner.dart';
 
+import '../models/cart_item.dart';
+import 'cart_screen.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -18,6 +21,23 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Category> categories = [];
   List<Product> products = [];
   List<Product> featuredProducts = [];
+  List<CartItem> cartItems = [];
+
+
+  void updateCart(Product product, int quantity) {
+    setState(() {
+      final index = cartItems.indexWhere((item) => item.product.id == product.id);
+
+      if (quantity == 0 && index != -1) {
+        cartItems.removeAt(index);
+      } else if (index == -1 && quantity > 0) {
+        cartItems.add(CartItem(product: product, quantity: quantity));
+      } else if (index != -1) {
+        cartItems[index].quantity = quantity;
+      }
+    });
+  }
+
 
   @override
   void initState() {
@@ -69,7 +89,12 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               IconButton(
                 icon: const Icon(Icons.shopping_cart_outlined, color: Colors.white),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CartScreen(cartItems: cartItems),),
+                );
+                },
               ),
               Positioned(
                 right: 8,
@@ -200,7 +225,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   return Container(
                     width: 160,
                     margin: const EdgeInsets.only(right: 12),
-                    child: ProductCard(product: featuredProducts[index]),
+                    child: ProductCard(
+                      product: featuredProducts[index],
+                      onQuantityChanged: updateCart,
+                    ),
                   );
                 },
               ),
@@ -233,7 +261,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 itemCount: products.length,
                 itemBuilder: (context, index) {
-                  return ProductCard(product: products[index]);
+                  return ProductCard(product: products[index],
+                                     onQuantityChanged: updateCart,);
                 },
               ),
             ),
