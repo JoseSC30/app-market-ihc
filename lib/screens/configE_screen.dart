@@ -17,7 +17,7 @@ class _ConfigEScreenState extends State<ConfigEScreen> {
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: SizedBox(
-        height: 360, // altura ajustada
+        height: 360, 
         child: Column(
           children: [
             // Header con fondo verde y título blanco + botón X

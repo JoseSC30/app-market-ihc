@@ -26,7 +26,7 @@ class CategoryCard extends StatelessWidget {
             ),
             child: Icon(
               category.icon,
-              color: Colors.green.shade700,
+              color:const Color(0xFF318066),
               size: 32,
             ),
           ),

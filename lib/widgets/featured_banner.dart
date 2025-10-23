@@ -6,15 +6,15 @@ class FeaturedBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 150,
+      height: 155,
       margin: const EdgeInsets.symmetric(horizontal: 24),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            Colors.green.shade600,
-            Colors.green.shade800,
+            const Color.fromARGB(255, 83, 165, 138),
+            const Color(0xFF318066),
           ],
         ),
         borderRadius: BorderRadius.circular(8),

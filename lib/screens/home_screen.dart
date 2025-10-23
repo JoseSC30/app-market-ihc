@@ -5,7 +5,6 @@ import '../data/sample_data.dart';
 import '../widgets/category_card.dart';
 import '../widgets/product_card.dart';
 import '../widgets/featured_banner.dart';
-
 import '../models/cart_item.dart';
 import 'cart_screen.dart';
 
@@ -21,8 +20,10 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Category> categories = [];
   List<Product> products = [];
   List<Product> featuredProducts = [];
+  List<Product> filteredProducts = [];
   List<CartItem> cartItems = [];
 
+  final TextEditingController _searchController = TextEditingController();
 
   void updateCart(Product product, int quantity) {
     setState(() {
@@ -38,13 +39,39 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-
   @override
   void initState() {
     super.initState();
     categories = SampleData.getCategories();
     products = SampleData.getProducts();
     featuredProducts = products.where((p) => p.isFeatured).toList();
+    filteredProducts = List.from(products);
+
+    _searchController.addListener(_filterProducts);
+  }
+
+  void _filterProducts() {
+    final query = _searchController.text.toLowerCase();
+
+    setState(() {
+      if (query.isEmpty) {
+        filteredProducts = List.from(products);
+      } else {
+        filteredProducts = products.where((product) {
+          return product.name.toLowerCase().contains(query) ||
+              product.description.toLowerCase().contains(query) ||
+              product.category.toLowerCase().contains(query);
+        }).toList();
+      }
+
+      featuredProducts = filteredProducts.where((p) => p.isFeatured).toList();
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   @override
@@ -53,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: Colors.grey.shade50,
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.green.shade700,
+        backgroundColor: const Color(0xFF318066),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -91,35 +118,38 @@ class _HomeScreenState extends State<HomeScreen> {
                 icon: const Icon(Icons.shopping_cart_outlined, color: Colors.white),
                 onPressed: () {
                   Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => CartScreen(cartItems: cartItems),),
-                );
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CartScreen(cartItems: cartItems),
+                    ),
+                  );
                 },
               ),
-              Positioned(
-                right: 8,
-                top: 8,
-                child: Container(
-                  padding: const EdgeInsets.all(4),
-                  decoration: const BoxDecoration(
-                    color: Colors.orange,
-                    shape: BoxShape.circle,
-                  ),
-                  constraints: const BoxConstraints(
-                    minWidth: 16,
-                    minHeight: 16,
-                  ),
-                  child: const Text(
-                    '3',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
+              if (cartItems.isNotEmpty)
+                Positioned(
+                  right: 8,
+                  top: 8,
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: const BoxDecoration(
+                      color: Colors.orange,
+                      shape: BoxShape.circle,
                     ),
-                    textAlign: TextAlign.center,
+                    constraints: const BoxConstraints(
+                      minWidth: 16,
+                      minHeight: 16,
+                    ),
+                    child: Text(
+                      cartItems.length.toString(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ),
-              ),
             ],
           ),
         ],
@@ -128,11 +158,12 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Barra de búsqueda
+            // 🔍 Barra de búsqueda
             Container(
-              color: Colors.green.shade700,
+              color: const Color(0xFF318066),
               padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
               child: TextField(
+                controller: _searchController,
                 decoration: InputDecoration(
                   hintText: 'Buscar productos...',
                   prefixIcon: const Icon(Icons.search),
@@ -147,12 +178,12 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             const SizedBox(height: 20),
-            
+
             // Banner destacado
             const FeaturedBanner(),
             const SizedBox(height: 24),
 
-            // Categorías
+            // 🏷️ Categorías
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
@@ -168,9 +199,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   TextButton(
                     onPressed: () {},
-                    child: Text(
+                    child: const Text(
                       'Ver todas',
-                      style: TextStyle(color: Colors.green.shade700),
+                      style: TextStyle(color: Color(0xFF318066)),
                     ),
                   ),
                 ],
@@ -190,52 +221,54 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 24),
 
-            // Productos destacados
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Productos Destacados',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey.shade800,
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {},
-                    child: Text(
-                      'Ver más',
-                      style: TextStyle(color: Colors.green.shade700),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 12),
-            SizedBox(
-              height: 240,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
+            // ⭐ Productos destacados
+            if (featuredProducts.isNotEmpty) ...[
+              Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                itemCount: featuredProducts.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    width: 160,
-                    margin: const EdgeInsets.only(right: 12),
-                    child: ProductCard(
-                      product: featuredProducts[index],
-                      onQuantityChanged: updateCart,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Productos Destacados',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey.shade800,
+                      ),
                     ),
-                  );
-                },
+                    TextButton(
+                      onPressed: () {},
+                      child: const Text(
+                        'Ver más',
+                        style: TextStyle(color: Color(0xFF318066)),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 24),
+              const SizedBox(height: 12),
+              SizedBox(
+                height: 240,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  itemCount: featuredProducts.length,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      width: 160,
+                      margin: const EdgeInsets.only(right: 12),
+                      child: ProductCard(
+                        product: featuredProducts[index],
+                        onQuantityChanged: updateCart,
+                      ),
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: 24),
+            ],
 
-            // Todos los productos
+            // 🛍️ Todos los productos
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Text(
@@ -248,23 +281,40 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             const SizedBox(height: 12),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 0.65,
-                  crossAxisSpacing: 12,
-                  mainAxisSpacing: 12,
-                ),
-                itemCount: products.length,
-                itemBuilder: (context, index) {
-                  return ProductCard(product: products[index],
-                                     onQuantityChanged: updateCart,);
-                },
-              ),
+
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              child: filteredProducts.isEmpty
+                  ? const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                      child: Center(
+                        child: Text(
+                          'No se encontraron productos.',
+                          style: TextStyle(color: Colors.grey, fontSize: 16),
+                        ),
+                      ),
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: GridView.builder(
+                        key: ValueKey(filteredProducts.length),
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 0.65,
+                          crossAxisSpacing: 12,
+                          mainAxisSpacing: 12,
+                        ),
+                        itemCount: filteredProducts.length,
+                        itemBuilder: (context, index) {
+                          return ProductCard(
+                            product: filteredProducts[index],
+                            onQuantityChanged: updateCart,
+                          );
+                        },
+                      ),
+                    ),
             ),
             const SizedBox(height: 20),
           ],
@@ -278,7 +328,7 @@ class _HomeScreenState extends State<HomeScreen> {
           });
         },
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.green.shade700,
+        selectedItemColor: const Color(0xFF318066),
         unselectedItemColor: Colors.grey,
         items: const [
           BottomNavigationBarItem(

@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   // Colores principales
-  static final Color primary = Colors.green.shade700;
-  static final Color primaryLight = Colors.green.shade50;
-  static final Color primaryDark = Colors.green.shade800;
+  static final Color primary = const Color(0xFF318066);
+  static final Color primaryLight = const Color.fromARGB(255, 91, 149, 130);
+  static final Color primaryDark = const Color.fromARGB(255, 13, 68, 50);
   
   // Colores secundarios
   static const Color accent = Colors.orange;

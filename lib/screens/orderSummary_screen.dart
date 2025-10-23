@@ -8,7 +8,7 @@ class OrderSummaryScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Resumen'),
-        backgroundColor: const Color(0xFF318066), // verde
+        backgroundColor: const Color(0xFF318066), 
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -19,7 +19,19 @@ class OrderSummaryScreen extends StatelessWidget {
               style: TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 20),
-            // Puedes agregar un ListView con los productos, totales, etc.
+            // agregar un ListView
+            Expanded(
+              child: ListView.builder(
+                itemCount: 5,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text('Producto ${index + 1}'),
+                    subtitle: Text('Descripción del producto'),
+                    trailing: Text('\$${(index + 1) * 10}'),
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),
