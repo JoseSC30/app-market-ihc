@@ -158,7 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 🔍 Barra de búsqueda
+            // Barra de búsqueda
             Container(
               color: const Color(0xFF318066),
               padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
@@ -183,7 +183,7 @@ class _HomeScreenState extends State<HomeScreen> {
             const FeaturedBanner(),
             const SizedBox(height: 24),
 
-            // 🏷️ Categorías
+            // Categorías
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
@@ -221,7 +221,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 24),
 
-            // ⭐ Productos destacados
+            // Productos destacados
             if (featuredProducts.isNotEmpty) ...[
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -268,7 +268,7 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 24),
             ],
 
-            // 🛍️ Todos los productos
+            // Todos los productos
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Text(

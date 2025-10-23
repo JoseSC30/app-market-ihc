@@ -49,7 +49,6 @@ class _ConfigEScreenState extends State<ConfigEScreen> {
               ),
             ),
 
-            // Contenido con scroll si es necesario
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(16),
@@ -105,7 +104,7 @@ class _ConfigEScreenState extends State<ConfigEScreen> {
               ),
             ),
 
-            // Botón Aceptar fijo abajo
+            // Botón Aceptar
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Align(

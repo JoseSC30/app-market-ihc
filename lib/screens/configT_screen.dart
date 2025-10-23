@@ -38,7 +38,7 @@ class _ConfigTScreenState extends State<ConfigTScreen> {
             child: Form(
               key: _formKey,
               child: ListView(
-                padding: EdgeInsets.only(bottom: 80), // deja espacio para el botón
+                padding: EdgeInsets.only(bottom: 80),
                 children: [
                   // Imagen de Visa y Mastercard
                   Row(
@@ -169,7 +169,7 @@ class _ConfigTScreenState extends State<ConfigTScreen> {
             ),
           ),
 
-          // Botón fijo en esquina inferior derecha
+          // Botón en esquina inferior derecha
           Positioned(
             bottom: 16,
             right: 16,

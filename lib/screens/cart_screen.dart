@@ -51,7 +51,7 @@ class _CartScreenState extends State<CartScreen> {
       ),
       body: Column(
         children: [
-          // 🛒 LISTA DE PRODUCTOS
+          // LISTA DE PRODUCTOS
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -100,7 +100,7 @@ class _CartScreenState extends State<CartScreen> {
 
                               // Lista de productos
                               SizedBox(
-                                height: 250, // altura controlada
+                                height: 250,
                                 child: ListView.builder(
                                   itemCount: cartItems.length,
                                   itemBuilder: (context, index) {
@@ -272,7 +272,6 @@ class _CartScreenState extends State<CartScreen> {
                             builder: (context) => const ConfigEScreen(),
                           );
                           if (result != null) {
-                            // Aquí puedes manejar la ubicación seleccionada
                             print('Ubicación seleccionada: $result');
                           }
                         },
@@ -328,7 +327,7 @@ class _CartScreenState extends State<CartScreen> {
                       ),
                     ),
 
-                    // Botón "Config. Tarjeta" visible solo si elige "Tarjeta"
+                    // Botón "Config. Tarjeta" visible solo si se elige "Tarjeta"
                     if (paymentMethod == 'Tarjeta') ...[
                       const SizedBox(width: 8),
                       ElevatedButton(
@@ -373,7 +372,14 @@ class _CartScreenState extends State<CartScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const OrderSummaryScreen(),
+                            builder: (context) => OrderSummaryScreen(
+                              cartItems: cartItems,
+                              deliveryType: deliveryType,
+                              paymentMethod: paymentMethod,
+                              deliveryAddress: deliveryType == 'Delivery' 
+                                ? 'Dirección configurada' 
+                                : null,
+                            ),
                           ),
                         );
                       }
