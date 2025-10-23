@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import '../models/cart_item.dart';
+import 'configE_screen.dart';
+import 'configT_screen.dart';
+import 'orderSummary_screen.dart'; 
+
 
 class CartScreen extends StatefulWidget {
   final List<CartItem> cartItems;
@@ -228,45 +232,16 @@ class _CartScreenState extends State<CartScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Campo de código de descuento
+                // Tipo de entrega + botón "Config. Entrega"
                 Row(
                   children: [
                     const Text(
-                      'Cod. de descuento:',
+                      'Tipo de entrega: ',
                       style: TextStyle(fontSize: 13),
                     ),
                     const SizedBox(width: 6),
                     SizedBox(
-                      width: 140,
-                      height: 28,
-                      child: TextField(
-                        controller: discountController,
-                        decoration: InputDecoration(
-                          isDense: true,
-                          contentPadding:
-                              const EdgeInsets.symmetric(vertical: 4, horizontal: 6),
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey.shade400, width: 1),
-                          ),
-                        ),
-                        style: const TextStyle(fontSize: 13),
-                      ),
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: 6),
-
-                // Tipo de entrega
-                Row(
-                  children: [
-                    const Text(
-                      'Tipo de entrega:  ',
-                      style: TextStyle(fontSize: 13),
-                    ),
-                    const SizedBox(width: 6),
-                    SizedBox(
-                      width: 150,
+                      width: 90,
                       height: 28,
                       child: DropdownButtonFormField<String>(
                         value: deliveryType,
@@ -286,29 +261,59 @@ class _CartScreenState extends State<CartScreen> {
                         style: const TextStyle(fontSize: 13, color: Colors.black),
                       ),
                     ),
+
+                    // Botón "Config. Entrega" visible solo si elige "Delivery"
+                    if (deliveryType == 'Delivery') ...[
+                      const SizedBox(width: 8),
+                      ElevatedButton(
+                        onPressed: () async {
+                          final result = await showDialog<String>(
+                            context: context,
+                            builder: (context) => const ConfigEScreen(),
+                          );
+                          if (result != null) {
+                            // Aquí puedes manejar la ubicación seleccionada
+                            print('Ubicación seleccionada: $result');
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.grey.shade300,
+                          foregroundColor: Colors.black,
+                          padding:
+                              const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          elevation: 0,
+                        ),
+                        child: const Text(
+                          'Config. Entrega',
+                          style: TextStyle(fontSize: 13),
+                        ),
+                      ),
+                    ],
                   ],
                 ),
 
                 const SizedBox(height: 6),
 
-                // Método de pago
+                // Método de pago + botón "Config. Tarjeta"
                 Row(
                   children: [
                     const Text(
-                      'Método de Pago: ',
+                      'Método de Pago:',
                       style: TextStyle(fontSize: 13),
                     ),
                     const SizedBox(width: 6),
                     SizedBox(
-                      width: 150,
+                      width: 90,
                       height: 28,
                       child: DropdownButtonFormField<String>(
                         value: paymentMethod,
                         items: const [
                           DropdownMenuItem(value: 'Efectivo', child: Text('Efectivo')),
-                          DropdownMenuItem(value: 'Tarjeta', child: Text('Tarjeta')),
-                          DropdownMenuItem(
-                              value: 'Transferencia', child: Text('Transferencia')),
+                          DropdownMenuItem(value: 'Tarjeta', child: Text('Tarjeta'))
+                          // DropdownMenuItem(value: 'Transferencia', child: Text('Transferencia')),
                         ],
                         onChanged: (value) => setState(() => paymentMethod = value!),
                         decoration: InputDecoration(
@@ -322,17 +327,56 @@ class _CartScreenState extends State<CartScreen> {
                         style: const TextStyle(fontSize: 13, color: Colors.black),
                       ),
                     ),
+
+                    // Botón "Config. Tarjeta" visible solo si elige "Tarjeta"
+                    if (paymentMethod == 'Tarjeta') ...[
+                      const SizedBox(width: 8),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const ConfigTScreen()),
+                        );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.grey.shade300,
+                          foregroundColor: Colors.black,
+                          padding:
+                              const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          elevation: 0,
+                        ),
+                        child: const Text(
+                          'Config. Tarjeta',
+                          style: TextStyle(fontSize: 13),
+                        ),
+                      ),
+                    ],
                   ],
                 ),
 
-                const SizedBox(height: 10),
+                const SizedBox(height: 25),
 
                 // Botón "Siguiente"
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: ElevatedButton(
+                Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ElevatedButton(
                     onPressed: () {
-                      // Acción siguiente
+                      if (cartItems.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('El carrito está vacío')),
+                        );
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const OrderSummaryScreen(),
+                          ),
+                        );
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF2E3131),
@@ -345,15 +389,19 @@ class _CartScreenState extends State<CartScreen> {
                     child: const Text(
                       'Siguiente',
                       style: TextStyle(color: Colors.white, fontSize: 13),
-                    ),
+                        ),
                   ),
-                ),
-              ],
-            ),
-          ),
+                ],
+              ),
 
+
+
+              
+            ],
+          ),
+        ), 
         ],
       ),
     );
   }
-}
+} 
